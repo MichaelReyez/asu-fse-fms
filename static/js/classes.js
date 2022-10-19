@@ -64,7 +64,9 @@ class Button {
   }
   render() {
     this.div = createDiv()
-    nestElement(this.div, createElement('label', this.textLabel))
+    var label = createElement('label', this.textLabel)
+    label.style('cursor', 'pointer')
+    nestElement(this.div, label)
     this.div.style('cursor', 'pointer')
     this.div.style('user-select', 'none')
     this.div.style('display', 'flex')
