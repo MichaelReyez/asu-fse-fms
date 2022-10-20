@@ -4,6 +4,15 @@ function setup() {
   aimingGame = new Context('white')
   typingGame = new Context('white')
   matchingGame = new Context('white')
+  i1 = createImg('static/img/aiming-icon.png', 'picture')
+  i1.style('max-width', '100%')
+  i1.style('object-fit', 'contain')
+  i2 = createImg('static/img/typing-icon.png', 'picture')
+  i2.style('max-width', '100%')
+  i2.style('object-fit', 'contain')
+  i3 = createImg('static/img/matching-icon.png', 'picture')
+  i3.style('max-width', '70%')
+  i3.style('object-fit', 'contain')
   mainMenu.addElements(
     [new ButtonCollection(mainMenu, {
       'display': 'flex',
@@ -19,8 +28,10 @@ function setup() {
         'border': '0.1em black solid',
         'padding': '1em',
         'width': '4em',
+        'height': '4em',
         'text-align': 'center',
-      }),
+        'flex-flow': 'column'
+      }, posX = null, posY = null, nestedElement = i1),
       new Button(mainMenu, 'Typing', switchContext, [typingGame, mainMenu], {
         'font-size': '2em',
         'border-radius': '10em',
@@ -28,8 +39,10 @@ function setup() {
         'border': '0.1em black solid',
         'padding': '1em',
         'width': '4em',
+        'height': '4em',
         'text-align': 'center',
-      }),
+        'flex-flow': 'column'
+      }, posX = null, posY = null, nestedElement = i2),
       new Button(mainMenu, 'Matching', switchContext, [matchingGame, mainMenu], {
         'font-size': '2em',
         'border-radius': '10em',
@@ -37,8 +50,10 @@ function setup() {
         'border': '0.1em black solid',
         'padding': '1em',
         'width': '4em',
+        'height': '4em',
         'text-align': 'center',
-      })
+        'flex-flow': 'column'
+      }, posX = null, posY = null, nestedElement = i3)
     ]), new Title(mainMenu, 'No More Stroke!', {
       'font-size': '6em',
       'text-align': 'center',

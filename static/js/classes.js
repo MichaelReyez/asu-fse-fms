@@ -50,7 +50,7 @@ class Context {
 }
 
 class Button {
-  constructor(parentContext, textLabel, callbackFunction, callbackFunctionArgs, css, posX = null, posY = null) {
+  constructor(parentContext, textLabel, callbackFunction, callbackFunctionArgs, css, posX = null, posY = null, nestedElement = null) {
     this.parentContext = parentContext
     this.textLabel = textLabel
     this.callbackFunction = function() {
@@ -61,9 +61,13 @@ class Button {
     this.id = makeid(16)
     this.posX = posX
     this.posY = posY
+    this.nestedElement = nestedElement
   }
   render() {
     this.div = createDiv()
+    if (this.nestedElement) {
+      nestElement(this.div, this.nestedElement)
+    }
     var label = createElement('label', this.textLabel)
     label.style('cursor', 'pointer')
     nestElement(this.div, label)
@@ -72,6 +76,7 @@ class Button {
     this.div.style('display', 'flex')
     this.div.style('align-items', 'center')
     this.div.style('justify-content', 'center')
+    this.div.style('flex-flow', 'columiconfriconn')
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
@@ -115,7 +120,6 @@ class ButtonCollection {
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
-    console.log(this.buttons)
     for (const button in this.buttons) {
       this.buttons[button].render()
       nestElement(this.div, this.buttons[button].div)
