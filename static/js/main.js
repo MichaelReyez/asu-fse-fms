@@ -7,12 +7,15 @@ function setup() {
   i1 = createImg('static/img/aiming-icon.png', 'picture')
   i1.style('max-width', '100%')
   i1.style('object-fit', 'contain')
+  i1.attribute('draggable', 'false')
   i2 = createImg('static/img/typing-icon.png', 'picture')
   i2.style('max-width', '100%')
   i2.style('object-fit', 'contain')
+  i2.attribute('draggable', 'false')
   i3 = createImg('static/img/matching-icon.png', 'picture')
   i3.style('max-width', '70%')
   i3.style('object-fit', 'contain')
+  i3.attribute('draggable', 'false')
   mainMenu.addElements(
     [new ButtonCollection(mainMenu, {
       'display': 'flex',
