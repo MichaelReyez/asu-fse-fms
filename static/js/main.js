@@ -68,7 +68,7 @@ function setup() {
         'font-weight': 'bold',
         'font-family': 'Futura'
       }, 0, windowHeight * 0.05),
-      new Button(aimingGame, 'Back', switchContext, [mainMenu, aimingGame], {
+      new Button(aimingGame, '< Back', switchContext, [mainMenu, aimingGame], {
         'font-size': '2em',
         'border-radius': '2em',
         'border': '0.1em black solid',
@@ -85,7 +85,7 @@ function setup() {
       'text-align': 'center',
       'font-weight': 'bold',
       'font-family': 'Futura'
-    }, 0, windowHeight * 0.05), new Button(typingGame, 'Back', switchContext, [mainMenu, typingGame], {
+    }, 0, windowHeight * 0.05), new Button(typingGame, '< Back', switchContext, [mainMenu, typingGame], {
       'font-size': '2em',
       'border-radius': '2em',
       'border': '0.1em black solid',
@@ -102,7 +102,7 @@ function setup() {
         'font-weight': 'bold',
         'font-family': 'Futura'
       }, 0, windowHeight * 0.05),
-      new Button(matchingGame, 'Back', switchContext, [mainMenu, matchingGame], {
+      new Button(matchingGame, '< Back', switchContext, [mainMenu, matchingGame], {
         'font-size': '2em',
         'border-radius': '2em',
         'border': '0.1em black solid',
