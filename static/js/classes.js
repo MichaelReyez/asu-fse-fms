@@ -96,6 +96,15 @@ class Button {
       console.log(`Button ${this.id} not rendered, derender not executed.`)
     }
   }
+  move(x, y) {
+    this.posX = x
+    this.posY = y
+    try {
+      this.div.position(this.posX, this.poY)
+    } catch (e) {
+      console.log(`Button ${this.id} not rendered, move not executed.`)
+    }
+  }
 }
 
 class ButtonCollection {
