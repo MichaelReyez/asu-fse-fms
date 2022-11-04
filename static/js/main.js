@@ -5,9 +5,9 @@ function setup() {
   document.querySelector('body').style.backgroundPosition = 'center 25%'
   document.querySelector('canvas').remove()
   mainMenu = new Context('transparent')
-  aimingGame = new Context('transparent')
-  typingGame = new Context('transparent')
-  matchingGame = new Context('transparent')
+  aimingGameCtx = new Context('transparent')
+  typingGameCtx = new Context('transparent')
+  matchingGameCtx = new Context('transparent')
   i1 = createImg('static/img/aiming-icon.png', 'picture')
   i1.style('max-width', '100%')
   i1.style('object-fit', 'contain')
@@ -32,7 +32,7 @@ function setup() {
       'background': 'rgba(0,0,0,0.2)',
       'backdrop-filter': 'blur(5px)',
       'box-shadow': '0 0 20px 50px rgba(0,0,0,0.2)'
-    }, 0, windowHeight / 2, [new Button(mainMenu, 'Aiming', switchContext, [aimingGame, mainMenu], {
+    }, 0, windowHeight / 2, [new Button(mainMenu, 'Aiming', switchContext, [aimingGameCtx, mainMenu], {
         'font-size': '2em',
         'border-radius': '1em',
         'aspect-ratio': '1/1',
@@ -46,7 +46,7 @@ function setup() {
         'color': '#fc7762',
         'box-shadow': '0 20px 0 0 #bf5a4b'
       }, posX = null, posY = null, nestedElement = i1),
-      new Button(mainMenu, 'Typing', switchContext, [typingGame, mainMenu], {
+      new Button(mainMenu, 'Typing', switchContext, [typingGameCtx, mainMenu], {
         'font-size': '2em',
         'border-radius': '1em',
         'aspect-ratio': '1/1',
@@ -60,7 +60,7 @@ function setup() {
         'color': '#59eb85',
         'box-shadow': '0 20px 0 0 #47ba6a'
       }, posX = null, posY = null, nestedElement = i2),
-      new Button(mainMenu, 'Matching', switchContext, [matchingGame, mainMenu], {
+      new Button(mainMenu, 'Matching', switchContext, [matchingGameCtx, mainMenu], {
         'font-size': '2em',
         'border-radius': '1em',
         'aspect-ratio': '1/1',
@@ -81,14 +81,15 @@ function setup() {
       'font-family': 'Futura',
     }, 0, windowHeight * 0.05)]
   )
-  aimingGame.addElements(
-    [new Title(aimingGame, 'Aiming', {
+  aimingGame = new AimGame(aimingGameCtx)
+  aimingGameCtx.addElements(
+    [new Title(aimingGameCtx, 'Aiming', {
         'font-size': '4em',
         'text-align': 'center',
         'font-weight': 'bold',
         'font-family': 'Futura'
       }, 0, windowHeight * 0.05),
-      new Button(aimingGame, '< Back', switchContext, [mainMenu, aimingGame], {
+      new Button(aimingGameCtx, '< Back', switchContext, [mainMenu, aimingGameCtx], {
         'font-size': '2em',
         'border-radius': '2em',
         'border': '0.1em black solid',
@@ -97,15 +98,54 @@ function setup() {
         'text-align': 'center',
         'font-family': 'Futura'
       }, windowWidth * 0.05, windowHeight * 0.05),
+      new ScoreCounter(aimingGameCtx, 'Score', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.05, windowHeight * 0.9),
+      new ScoreCounter(aimingGameCtx, 'Accuracy', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.25, windowHeight * 0.9, '100.0%'),
+      new ScoreCounter(aimingGameCtx, 'Time', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.8, windowHeight * 0.05, '0s'),
+      new Button(aimingGameCtx, 'Start', aimingGame.start, [], {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'width': '4em',
+        'text-align': 'center',
+        'font-family': 'Futura'
+      }, windowWidth * 0.8, windowHeight * 0.9, null, aimingGame)
     ]
   )
-  typingGame.addElements(
-    [new Title(typingGame, 'Typing', {
+  typingGameCtx.addElements(
+    [new Title(typingGameCtx, 'Typing', {
       'font-size': '4em',
       'text-align': 'center',
       'font-weight': 'bold',
       'font-family': 'Futura'
-    }, 0, windowHeight * 0.05), new Button(typingGame, '< Back', switchContext, [mainMenu, typingGame], {
+    }, 0, windowHeight * 0.05), new Button(typingGameCtx, '< Back', switchContext, [mainMenu, typingGameCtx], {
       'font-size': '2em',
       'border-radius': '2em',
       'border': '0.1em black solid',
@@ -115,14 +155,14 @@ function setup() {
       'font-family': 'Futura'
     }, windowWidth * 0.05, windowHeight * 0.05), ]
   )
-  matchingGame.addElements(
-    [new Title(matchingGame, 'Matching', {
+  matchingGameCtx.addElements(
+    [new Title(matchingGameCtx, 'Matching', {
         'font-size': '4em',
         'text-align': 'center',
         'font-weight': 'bold',
         'font-family': 'Futura'
       }, 0, windowHeight * 0.05),
-      new Button(matchingGame, '< Back', switchContext, [mainMenu, matchingGame], {
+      new Button(matchingGameCtx, '< Back', switchContext, [mainMenu, matchingGameCtx], {
         'font-size': '2em',
         'border-radius': '2em',
         'border': '0.1em black solid',

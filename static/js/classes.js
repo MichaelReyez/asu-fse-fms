@@ -23,7 +23,6 @@ class Context {
     this.active = active
     this.backgroundColor = backgroundColor
     this.elements = []
-    this.visibleElements = []
     this.id = makeid(16)
   }
   addElements(elements) {
@@ -31,30 +30,49 @@ class Context {
       this.elements.push(element)
     })
   }
+  removeElement(element) {
+    try {
+      this.elements.splice(this.elements.indexOf(element), 1)
+    } catch {
+      console.log(`Could not find element ${element.id} in context ${this.id}.`)
+    }
+  }
   render() {
     this.active = true
     background(this.backgroundColor)
     this.elements.forEach(element => {
-      element.render()
+      try {
+        element.render()
+      } catch {
+        console.log(`Element ${element} in context ${this.id} not valid. Rendering not executed. Assuming custom element`)
+      }
     })
   }
   derender() {
     this.active = false
     this.elements.forEach(element => {
-      element.derender()
+      try {
+        element.derender()
+      } catch {
+        console.log(`Element ${element} in context ${this.id} not valid. Derendering not executed. Assuming custom element`)
+      }
     })
-  }
-  hideElement(element) {
-    this.visibleElements.splice(this.visibleElements.indexOf(element), 1)
   }
 }
 
 class Button {
-  constructor(parentContext, textLabel, callbackFunction, callbackFunctionArgs, css, posX = null, posY = null, nestedElement = null) {
+  constructor(parentContext, textLabel, callbackFunc, callbackFunctionArgs, css, posX = null, posY = null, nestedElement = null, callbackFunctionClass = null) {
     this.parentContext = parentContext
     this.textLabel = textLabel
-    this.callbackFunction = function() {
-      callbackFunction(...callbackFunctionArgs)
+    if (callbackFunctionClass != null) {
+      callbackFunc = callbackFunc.bind(callbackFunctionClass)
+      this.callbackFunction = () => {
+        callbackFunc(...callbackFunctionArgs)
+      }
+    } else {
+      this.callbackFunction = () => {
+        callbackFunc(...callbackFunctionArgs)
+      }
     }
     this.callbackFunctionArgs = callbackFunctionArgs
     this.css = css
@@ -103,6 +121,60 @@ class Button {
       this.div.position(this.posX, this.poY)
     } catch (e) {
       console.log(`Button ${this.id} not rendered, move not executed.`)
+    }
+  }
+}
+
+class Target {
+  constructor(context, game, css, posX, posY, nestedElement) {
+    this.parentContext = context
+    this.css = css
+    this.id = makeid(16)
+    this.posX = posX
+    this.posY = posY
+    this.nestedElement = nestedElement
+    this.callbackFunction = () => {
+      game.onHit()
+      game.relocateTarget(this)
+    }
+  }
+  render() {
+    this.div = createDiv()
+    if (this.nestedElement) {
+      nestElement(this.div, this.nestedElement)
+    }
+    this.div.style('cursor', 'pointer')
+    this.div.style('user-select', 'none')
+    this.div.style('display', 'flex')
+    this.div.style('align-items', 'center')
+    this.div.style('justify-content', 'center')
+    this.div.style('flex-flow', 'columiconfriconn')
+    for (const property in this.css) {
+      this.div.style(property, this.css[property])
+    }
+    if (this.posX == null) {
+      this.div.position(this.posX, this.posY, 'relative')
+    } else {
+      this.div.position(this.posX, this.posY)
+    }
+    this.div.mouseClicked(this.callbackFunction)
+    this.div.addClass('context-' + this.parentContext.id)
+    this.div.id('Target-' + this.id)
+  }
+  derender() {
+    try {
+      this.div.remove()
+    } catch (e) {
+      console.log(`Target ${this.id} not rendered, derender not executed.`)
+    }
+  }
+  move(x, y) {
+    this.posX = x
+    this.posY = y
+    try {
+      this.div.position(this.posX, this.posY)
+    } catch (e) {
+      console.log(`Target ${this.id} not rendered, move not executed.`)
     }
   }
 }
