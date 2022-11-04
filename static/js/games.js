@@ -32,11 +32,11 @@ class AimGame {
     this.updateHud()
   }
   updateHud() {
-    this.context.elements[2].updateValue(this.score.toFixed(1))
+    this.context.elements[4].updateValue((this.score * this.totalHits / this.totalShots).toFixed(1))
     if (this.totalShots != 0) {
-      this.context.elements[3].updateValue(`${(100 * this.totalHits / this.totalShots).toFixed(1) }%`)
+      this.context.elements[5].updateValue(`${(100 * this.totalHits / this.totalShots).toFixed(1) }%`)
     } else {
-      this.context.elements[3].updateValue('100.0%')
+      this.context.elements[5].updateValue('100.0%')
     }
   }
   relocateTarget(t) {
@@ -44,10 +44,10 @@ class AimGame {
   }
 
   randomX() {
-    return randInt(windowWidth * 0.9);
+    return randInt(windowWidth * 0.8) + (0.05 * windowWidth)
   }
   randomY() {
-    return randInt(windowHeight * 0.8)
+    return randInt(windowHeight * 0.6) + (0.15 * windowHeight)
   }
   createTargets() {
     var css = {
@@ -55,7 +55,7 @@ class AimGame {
       'height': `${this.targetRadius * 2}px`,
     }
     for (var i = 0; i < this.numTargets; i++) {
-      var img = createImg('static/img/aiming-icon.png', 'picture')
+      var img = createImg('static/img/aimgame/duck.png', 'picture')
       img.style('max-width', '100%')
       img.style('object-fit', 'contain')
       img.attribute('draggable', 'false')
@@ -67,7 +67,6 @@ class AimGame {
     this.missBox = createDiv()
     this.missBox.style('width', '100vw')
     this.missBox.style('height', '100vh')
-    this.missBox.style('z-index', '-100')
     let f = this.onMiss.bind(this)
     this.missBox.mouseClicked(f)
     this.missBox.id('missBox')
@@ -77,12 +76,13 @@ class AimGame {
   }
   removeMissBox() {
     this.context.removeElement(this.missBox)
+    this.missBox.remove()
     this.missBox = null;
   }
 
   end() {
     this.started = false
-    this.context.elements[2].updateValue(`${(this.score * this.totalHits / this.totalShots).toFixed(1) }`)
+    this.context.elements[4].updateValue(`${(this.score * this.totalHits / this.totalShots).toFixed(1) }`)
     this.stopTimer(this.timerId)
     this.context.derender()
     for (var target of this.targets) {
@@ -95,10 +95,10 @@ class AimGame {
 
   startTimer() {
     this.timeLeft = 30
-    this.context.elements[4].updateValue(`${this.timeLeft}s`)
+    this.context.elements[6].updateValue(`${this.timeLeft}s`)
     return setInterval(() => {
       this.timeLeft--;
-      this.context.elements[4].updateValue(`${this.timeLeft}s`)
+      this.context.elements[6].updateValue(`${this.timeLeft}s`)
       if (this.timeLeft <= 0) {
         this.end()
       }

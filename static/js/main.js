@@ -5,7 +5,7 @@ function setup() {
   document.querySelector('body').style.backgroundPosition = 'center 25%'
   document.querySelector('canvas').remove()
   mainMenu = new Context('transparent')
-  aimingGameCtx = new Context('transparent')
+  aimingGameCtx = new Context('transparent', 'static/img/aimgame/background.jpg')
   typingGameCtx = new Context('transparent')
   matchingGameCtx = new Context('transparent')
   i1 = createImg('static/img/aiming-icon.png', 'picture')
@@ -85,23 +85,36 @@ function setup() {
   aimingGameCtx.addElements(
     [new Title(aimingGameCtx, 'Aiming', {
         'font-size': '4em',
+        'color': '#d9a362',
         'text-align': 'center',
         'font-weight': 'bold',
-        'font-family': 'Futura'
-      }, 0, windowHeight * 0.05),
+        'font-family': 'Futura',
+        'z-index': '100'
+      }, 0, windowHeight * 0.015),
       new Button(aimingGameCtx, '< Back', switchContext, [mainMenu, aimingGameCtx], {
         'font-size': '2em',
+        'color': '#d9a362',
         'border-radius': '2em',
-        'border': '0.1em black solid',
+        'border': '0.1em #d9a362 solid',
         'padding': '0.2em 1em',
         'width': '4em',
         'text-align': 'center',
-        'font-family': 'Futura'
-      }, windowWidth * 0.05, windowHeight * 0.05),
+        'font-family': 'Futura',
+        'z-index': '100'
+      }, windowWidth * 0.05, windowHeight * 0.025),
+      new DecorativeBox(aimingGameCtx, '/static/img/aimgame/wood.jpg', {
+        'width': '100vw',
+        'height': '12vh',
+      }, 0, 0),
+      new DecorativeBox(aimingGameCtx, '/static/img/aimgame/wood.jpg', {
+        'width': '100vw',
+        'height': '15vh',
+      }, 0, windowHeight * 0.85),
       new ScoreCounter(aimingGameCtx, 'Score', {
         'font-size': '2em',
+        'color': '#d9a362',
         'border-radius': '2em',
-        'border': '0.1em black solid',
+        'border': '0.1em #d9a362 solid',
         'padding': '0.2em 1em',
         'text-align': 'center',
         'font-family': 'Futura',
@@ -111,7 +124,8 @@ function setup() {
       new ScoreCounter(aimingGameCtx, 'Accuracy', {
         'font-size': '2em',
         'border-radius': '2em',
-        'border': '0.1em black solid',
+        'color': '#d9a362',
+        'border': '0.1em #d9a362 solid',
         'padding': '0.2em 1em',
         'text-align': 'center',
         'font-family': 'Futura',
@@ -121,17 +135,19 @@ function setup() {
       new ScoreCounter(aimingGameCtx, 'Time', {
         'font-size': '2em',
         'border-radius': '2em',
-        'border': '0.1em black solid',
+        'color': '#d9a362',
+        'border': '0.1em #d9a362 solid',
         'padding': '0.2em 1em',
         'text-align': 'center',
         'font-family': 'Futura',
         'overflow': 'hidden',
         'white-space': 'nowrap',
-      }, windowWidth * 0.8, windowHeight * 0.05, '0s'),
+      }, windowWidth * 0.8, windowHeight * 0.025, '0s'),
       new Button(aimingGameCtx, 'Start', aimingGame.start, [], {
         'font-size': '2em',
         'border-radius': '2em',
-        'border': '0.1em black solid',
+        'color': '#d9a362',
+        'border': '0.1em #d9a362 solid',
         'padding': '0.2em 1em',
         'width': '4em',
         'text-align': 'center',

@@ -19,9 +19,10 @@ function nestElement(parent, child) {
 }
 
 class Context {
-  constructor(backgroundColor, active = false) {
+  constructor(backgroundColor, backgroundImage = null, active = false) {
     this.active = active
     this.backgroundColor = backgroundColor
+    this.backgroundImage = backgroundImage
     this.elements = []
     this.id = makeid(16)
   }
@@ -39,7 +40,17 @@ class Context {
   }
   render() {
     this.active = true
-    background(this.backgroundColor)
+    if (this.backgroundImage == null) {
+      background(this.backgroundColor)
+    } else {
+      this.bg = createDiv()
+      this.bg.style('background-image', `url(${this.backgroundImage})`)
+      this.bg.style('background-repeat', 'no-repeat')
+      this.bg.style('background-size', 'cover')
+      this.bg.style('z-index', '-1000')
+      this.bg.style('width', '99vw')
+      this.bg.style('height', '99vh')
+    }
     this.elements.forEach(element => {
       try {
         element.render()
@@ -49,6 +60,9 @@ class Context {
     })
   }
   derender() {
+    if (this.bg != null) {
+      this.bg.remove()
+    }
     this.active = false
     this.elements.forEach(element => {
       try {
@@ -272,5 +286,35 @@ class ScoreCounter {
   updateValue(value) {
     this.value = value;
     this.div.html(`${this.textLabel}: ${this.value}`)
+  }
+}
+
+class DecorativeBox {
+  constructor(parentContext, imageUrl, css, posX, posY) {
+    this.parentContext = parentContext
+    this.imageUrl = imageUrl
+    this.css = css
+    this.id = makeid(16)
+    this.posX = posX
+    this.posY = posY
+  }
+  render() {
+    this.div = createDiv()
+    this.div.style('background-image', `url(${this.imageUrl})`)
+    this.div.style('background-repeat', 'no-repeat')
+    this.div.style('background-size', 'cover')
+    for (const property in this.css) {
+      this.div.style(property, this.css[property])
+    }
+    this.div.position(this.posX, this.posY)
+    this.div.addClass('context-' + this.parentContext.id)
+    this.div.id('decbox-' + this.id)
+  }
+  derender() {
+    try {
+      this.div.remove()
+    } catch (e) {
+      console.log(`DecBox ${this.id} not rendered, derender not executed.`)
+    }
   }
 }
