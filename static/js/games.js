@@ -122,7 +122,6 @@ class AimGame {
       this.createMissBox()
       this.context.derender()
       this.context.render()
-      this.startTimer()
     } else {
       this.end()
       this.context.derender()
@@ -130,6 +129,7 @@ class AimGame {
       this.createTargets()
       this.context.render()
     }
+    this.timerId = this.startTimer()
     this.started = true
     this.updateHud()
   }
