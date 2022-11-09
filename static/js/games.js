@@ -25,10 +25,14 @@ class AimGame {
     this.totalHits++
     this.totalShots++
     this.score += this.hitPoints
+    let a = new Audio('/static/snd/anime.wav')
+    a.play()
     this.updateHud()
   }
   onMiss(button) {
     this.totalShots++
+    let a = new Audio('/static/snd/tacobell.wav')
+    a.play()
     this.updateHud()
   }
   updateHud() {
@@ -118,14 +122,15 @@ class AimGame {
       this.createMissBox()
       this.context.derender()
       this.context.render()
-      this.started = true
-      this.timerId = this.startTimer()
+      this.startTimer()
     } else {
       this.end()
       this.context.derender()
+      this.createMissBox()
       this.createTargets()
       this.context.render()
     }
+    this.started = true
     this.updateHud()
   }
 }
