@@ -2,6 +2,99 @@ function randInt(num) {
   return Math.floor(Math.random() * num);
 }
 
+class TypeGame {
+  constructor(context) {
+    this.context = context
+
+    //game settings
+    this.score = 0
+    this.totalTypes = 0
+    this.totalCorrectTypes = 0
+
+    this.started = false
+    this.currentInput = ''
+    this.currentText = ''
+    this.mistake = false
+  }
+  checkMistakes() {
+    this.mistake = false
+    for (var i = 0; i < this.currentInput.length; i++) {
+      if (this.currentText[i] != this.currentInput[i]) {
+        this.spanLetter(i)
+        this.mistake = true
+      }
+    }
+  }
+  updateCursor() {
+    if (this.currentTextlength == this.currentInput.length) {
+      return
+    }
+    let part1 = this.currentText.slice(0, this.currentInput.length)
+    let part2 = this.currentText.slice(this.currentInput.length + 1, this.currentText.length)
+    this.context.elements[2].updateText(`${part1}<span style="text-decoration: underline">${this.currentText[this.currentInput.length]}</span>${part2}`)
+  }
+  spanLetter(index) {
+    let text = this.context.elements[3].div.html().toString()
+    let part1 = text.slice(0, index)
+    let part2 = text.slice(index + 1, text.length)
+
+    this.context.elements[3].updateText(`${part1}<span style="color: red; text-decoration: underline">${text[index]}</span>${part2}`)
+  }
+  deleteEvent(e) {
+    if (e.keyCode == 8) {
+      if (this.currentInput.length > 1) {
+        this.currentInput = this.currentInput.slice(0, this.currentInput.length - 1)
+      } else {
+        this.currentInput = ''
+      }
+    }
+    this.context.elements[3].updateText(this.currentInput)
+    this.checkMistakes()
+    this.updateCursor()
+  }
+  typeEvent(e) {
+    if (!this.mistake) {
+      if (e.key == 'Enter') {
+
+      } else {
+        this.currentInput += e.key
+      }
+      this.context.elements[3].updateText(this.currentInput)
+      this.checkMistakes()
+      this.updateCursor()
+    }
+  }
+  start() {
+    if (!this.started) {
+      this.started = true
+      document.addEventListener('keypress', (e) => {
+        this.typeEvent(e)
+      })
+      document.addEventListener('keydown', (e) => {
+        this.deleteEvent(e)
+      })
+      fetch('static/typegame/paragraphs.json')
+        .then(response => response.json()).then(json => {
+          this.currentText = json[randInt(json.length - 1)]
+          this.context.elements[2].updateText(this.currentText)
+        })
+    } else {
+      document.replaceWith(document.cloneNode(true))
+      document.addEventListener('keypress', (e) => {
+        this.typeEvent(e)
+      })
+      document.addEventListener('keydown', (e) => {
+        this.deleteEvent(e)
+      })
+      fetch('static/typegame/paragraphs.json')
+        .then(response => response.json()).then(json => {
+          this.currentText = json[randInt(json.length - 1)]
+          this.context.elements[2].updateText(this.currentText)
+        })
+    }
+  }
+}
+
 class AimGame {
   constructor(context) {
     this.context = context
@@ -69,6 +162,7 @@ class AimGame {
   }
   createMissBox() {
     this.missBox = createDiv()
+    this.missBox.style('cursor', 'url("static/img/crosshair.cur")')
     this.missBox.style('width', '100vw')
     this.missBox.style('height', '100vh')
     let f = this.onMiss.bind(this)

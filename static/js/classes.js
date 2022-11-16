@@ -256,6 +256,36 @@ class Title {
     }
   }
 }
+class TextBox {
+  constructor(parentContext, text, css, posX, posY) {
+    this.parentContext = parentContext
+    this.text = text
+    this.css = css
+    this.id = makeid(16)
+    this.posX = posX
+    this.posY = posY
+  }
+  render() {
+    this.div = createP(`${this.text}`)
+    for (const property in this.css) {
+      this.div.style(property, this.css[property])
+    }
+    this.div.position(this.posX, this.posY)
+    this.div.addClass('context-' + this.parentContext.id)
+    this.div.id('textbox-' + this.id)
+  }
+  derender() {
+    try {
+      this.div.remove()
+    } catch (e) {
+      console.log(`TextBox ${this.id} not rendered, derender not executed.`)
+    }
+  }
+  updateText(text) {
+    this.text = text;
+    this.div.html(`${this.text}`)
+  }
+}
 
 class ScoreCounter {
   constructor(parentContext, textLabel, css, posX, posY, initValue = 0) {

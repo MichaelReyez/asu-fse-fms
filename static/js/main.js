@@ -155,21 +155,62 @@ function setup() {
       }, windowWidth * 0.8, windowHeight * 0.9, null, aimingGame)
     ]
   )
+  typingGame = new TypeGame(typingGameCtx)
   typingGameCtx.addElements(
     [new Title(typingGameCtx, 'Typing', {
-      'font-size': '4em',
-      'text-align': 'center',
-      'font-weight': 'bold',
-      'font-family': 'Futura'
-    }, 0, windowHeight * 0.05), new Button(typingGameCtx, '< Back', switchContext, [mainMenu, typingGameCtx], {
-      'font-size': '2em',
-      'border-radius': '2em',
-      'border': '0.1em black solid',
-      'padding': '0.2em 1em',
-      'width': '4em',
-      'text-align': 'center',
-      'font-family': 'Futura'
-    }, windowWidth * 0.05, windowHeight * 0.05), ]
+        'font-size': '4em',
+        'text-align': 'center',
+        'font-weight': 'bold',
+        'font-family': 'Futura'
+      }, 0, windowHeight * 0.05),
+      new Button(typingGameCtx, '< Back', switchContext, [mainMenu, typingGameCtx], {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'width': '4em',
+        'text-align': 'center',
+        'font-family': 'Futura'
+      }, windowWidth * 0.05, windowHeight * 0.05),
+      new TextBox(typingGameCtx, '', {
+        'font-size': '1.5em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.4em 1em',
+        'text-align': 'left',
+        'font-family': 'Monaco',
+        'overflow': 'hidden',
+        'height': '40vh',
+        'width': '100vw',
+        'box-sizing': 'border-box',
+        'opacity': '50%',
+        'background': 'white'
+      }, 0, windowHeight * 0.4),
+      new TextBox(typingGameCtx, '', {
+        'font-size': '1.5em',
+        'border-radius': '2em',
+        'color': 'green',
+        'border': '0.1em black solid',
+        'padding': '0.4em 1em',
+        'text-align': 'left',
+        'font-family': 'Monaco',
+        'overflow': 'hidden',
+        'height': '40vh',
+        'width': '100vw',
+        'box-sizing': 'border-box',
+      }, 0, windowHeight * 0.4),
+      new Button(typingGameCtx, 'Start', typingGame.start, [], {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'width': '4em',
+        'text-align': 'center',
+        'font-family': 'Futura'
+      }, windowWidth * 0.8, windowHeight * 0.9, null, typingGame)
+    ]
   )
   matchingGameCtx.addElements(
     [new Title(matchingGameCtx, 'Matching', {
