@@ -15,6 +15,17 @@ class TypeGame {
     this.currentInput = ''
     this.currentText = ''
     this.mistake = false
+    this.elapsedTime = 0
+
+    this.speeds = []
+    this.wpmTimer = null
+
+    document.addEventListener('keypress', (e) => {
+      this.typeEvent(e)
+    })
+    document.addEventListener('keydown', (e) => {
+      this.deleteEvent(e)
+    })
   }
   checkMistakes() {
     this.mistake = false
@@ -26,72 +37,94 @@ class TypeGame {
     }
   }
   updateCursor() {
-    if (this.currentTextlength == this.currentInput.length) {
+    if (this.currentText.length == this.currentInput.length + 1) {
       return
+    } else {
+      let part1 = this.currentText.slice(0, this.currentInput.length + 1)
+      let part2 = this.currentText.slice(this.currentInput.length + 2, this.currentText.length)
+      this.context.elements[2].updateText(`${part1}<span style="text-decoration: underline">${this.currentText[this.currentInput.length + 1]}</span>${part2}`)
     }
-    let part1 = this.currentText.slice(0, this.currentInput.length)
-    let part2 = this.currentText.slice(this.currentInput.length + 1, this.currentText.length)
-    this.context.elements[2].updateText(`${part1}<span style="text-decoration: underline">${this.currentText[this.currentInput.length]}</span>${part2}`)
   }
   spanLetter(index) {
     let text = this.context.elements[3].div.html().toString()
     let part1 = text.slice(0, index)
     let part2 = text.slice(index + 1, text.length)
 
-    this.context.elements[3].updateText(`${part1}<span style="color: red; text-decoration: underline">${text[index]}</span>${part2}`)
+    if (text[index] != ' ') {
+      this.context.elements[3].updateText(`${part1}<span style="background: red; color: white; text-decoration: underline">${text[index]}</span>${part2}`)
+    } else {
+      this.context.elements[3].updateText(`${part1}<span style="white-space: pre-wrap; background: red; color: white; text-decoration: underline">&nbsp</span>${part2}`)
+    }
   }
   deleteEvent(e) {
-    if (e.keyCode == 8) {
-      if (this.currentInput.length > 1) {
-        this.currentInput = this.currentInput.slice(0, this.currentInput.length - 1)
-      } else {
-        this.currentInput = ''
-      }
-    }
-    this.context.elements[3].updateText(this.currentInput)
-    this.checkMistakes()
-    this.updateCursor()
-  }
-  typeEvent(e) {
-    if (!this.mistake) {
-      if (e.key == 'Enter') {
-
-      } else {
-        this.currentInput += e.key
+    if (this.started) {
+      if (e.keyCode == 8) {
+        if (this.currentInput.length > 1) {
+          this.currentInput = this.currentInput.slice(0, this.currentInput.length - 1)
+        } else {
+          this.currentInput = ''
+        }
       }
       this.context.elements[3].updateText(this.currentInput)
       this.checkMistakes()
       this.updateCursor()
     }
   }
+  typeEvent(e) {
+    if (this.currentText.length == this.currentInput.length + 1) {
+      this.wpmTimer = null
+      this.started = false;
+    }
+    if (!this.mistake && (this.started)) {
+      if (e.key == 'Enter') {
+
+      } else {
+        if (this.wpmTimer != null) {
+          this.speeds.push(Date.now() - this.wpmTimer)
+        }
+        this.wpmTimer = Date.now()
+        this.currentInput += e.key
+      }
+      this.context.elements[6].updateValue(`${this.calcSpeed()}`)
+      this.context.elements[3].updateText(this.currentInput)
+    }
+  }
+  calcSpeed() {
+    var sum = 0;
+    this.speeds.forEach(speed => {
+      sum += parseInt(speed)
+    })
+    return Math.ceil(60000 / (sum / this.speeds.length) / 5)
+  }
+  startTimer() {
+    this.elapsedTime = 0;
+    return setInterval(() => {
+      this.elapsedTime++
+      this.context.elements[5].updateValue(`${this.elapsedTime}s`)
+      if (!this.started) {
+        clearInterval(this.timerId)
+      }
+    }, 1000)
+  }
   start() {
+    this.currentInput = ""
+    this.context.elements[3].updateText(this.currentInput)
+    this.updateCursor()
     if (!this.started) {
-      this.started = true
-      document.addEventListener('keypress', (e) => {
-        this.typeEvent(e)
-      })
-      document.addEventListener('keydown', (e) => {
-        this.deleteEvent(e)
-      })
+      this.started = true;
       fetch('static/typegame/paragraphs.json')
         .then(response => response.json()).then(json => {
           this.currentText = json[randInt(json.length - 1)]
           this.context.elements[2].updateText(this.currentText)
         })
     } else {
-      document.replaceWith(document.cloneNode(true))
-      document.addEventListener('keypress', (e) => {
-        this.typeEvent(e)
-      })
-      document.addEventListener('keydown', (e) => {
-        this.deleteEvent(e)
-      })
       fetch('static/typegame/paragraphs.json')
         .then(response => response.json()).then(json => {
           this.currentText = json[randInt(json.length - 1)]
           this.context.elements[2].updateText(this.currentText)
         })
     }
+    this.timerId = this.startTimer()
   }
 }
 
@@ -181,7 +214,7 @@ class AimGame {
   end() {
     this.started = false
     this.context.elements[4].updateValue(`${(this.score * this.totalHits / this.totalShots).toFixed(1) }`)
-    this.stopTimer(this.timerId)
+    clearInterval(id)
     this.context.derender()
     for (var target of this.targets) {
       this.context.removeElement(target)
@@ -201,10 +234,6 @@ class AimGame {
         this.end()
       }
     }, 1000)
-  }
-
-  stopTimer(id) {
-    clearInterval(id)
   }
 
   start() {

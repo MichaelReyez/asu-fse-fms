@@ -209,7 +209,29 @@ function setup() {
         'width': '4em',
         'text-align': 'center',
         'font-family': 'Futura'
-      }, windowWidth * 0.8, windowHeight * 0.9, null, typingGame)
+      }, windowWidth * 0.8, windowHeight * 0.9, null, typingGame),
+      new ScoreCounter(typingGameCtx, 'Time', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.8, windowHeight * 0.025, '0s'),
+      new ScoreCounter(typingGame, 'Speed (WPM)', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.05, windowHeight * 0.9)
     ]
   )
   matchingGameCtx.addElements(
