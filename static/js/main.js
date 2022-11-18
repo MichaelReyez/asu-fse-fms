@@ -162,7 +162,7 @@ function setup() {
         'text-align': 'center',
         'font-weight': 'bold',
         'font-family': 'Futura'
-      }, 0, windowHeight * 0.05),
+      }, 0, windowHeight * 0.015),
       new Button(typingGameCtx, '< Back', switchContext, [mainMenu, typingGameCtx], {
         'font-size': '2em',
         'border-radius': '2em',

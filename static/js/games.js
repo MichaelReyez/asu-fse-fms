@@ -151,13 +151,13 @@ class AimGame {
     this.totalHits++
     this.totalShots++
     this.score += this.hitPoints
-    let a = new Audio('/static/snd/anime.wav')
+    let a = new Audio('/static/snd/quack.m4a')
     a.play()
     this.updateHud()
   }
   onMiss(button) {
     this.totalShots++
-    let a = new Audio('/static/snd/tacobell.wav')
+    let a = new Audio('/static/snd/pistol.m4a')
     a.play()
     this.updateHud()
   }
@@ -214,7 +214,7 @@ class AimGame {
   end() {
     this.started = false
     this.context.elements[4].updateValue(`${(this.score * this.totalHits / this.totalShots).toFixed(1) }`)
-    clearInterval(id)
+    clearInterval(this.timerId)
     this.context.derender()
     for (var target of this.targets) {
       this.context.removeElement(target)
