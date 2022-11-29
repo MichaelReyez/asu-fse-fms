@@ -171,7 +171,7 @@ function setup() {
         'width': '4em',
         'text-align': 'center',
         'font-family': 'Futura'
-      }, windowWidth * 0.05, windowHeight * 0.05),
+      }, windowWidth * 0.05, windowHeight * 0.025),
       new TextBox(typingGameCtx, '', {
         'font-size': '1.5em',
         'border-radius': '2em',
@@ -241,7 +241,7 @@ function setup() {
         'text-align': 'center',
         'font-weight': 'bold',
         'font-family': 'Futura'
-      }, 0, windowHeight * 0.05),
+      }, 0, windowHeight * 0.015),
       new Button(matchingGameCtx, '< Back', switchContext, [mainMenu, matchingGameCtx], {
         'font-size': '2em',
         'border-radius': '2em',
@@ -250,11 +250,34 @@ function setup() {
         'width': '4em',
         'text-align': 'center',
         'font-family': 'Futura'
-      }, windowWidth * 0.05, windowHeight * 0.05),
-      new Grid(matchingGameCtx, 2, 4, {
-        'width': '100vw',
-        'height': '50vw',
-      }, 0, 0.25 * windowHeight)
+      }, windowWidth * 0.05, windowHeight * 0.025),
+      new Grid(matchingGameCtx, 4, 5, {
+        'width': '55vw',
+        'height': '44vw',
+        'gap': '1vw',
+        'border': '0.2em black solid',
+      }, windowWidth * 0.225, 0.175 * windowHeight),
+      new Button(matchingGameCtx, 'Start', matchingGame.start, [], {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'width': '4em',
+        'text-align': 'center',
+        'font-family': 'Futura'
+      }, windowWidth * 0.8, windowHeight * 0.9, null, matchingGame),
+      new ScoreCounter(matchingGameCtx, 'Time', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.8, windowHeight * 0.025, '0s'),
     ]
   )
   matchingGame.preload()

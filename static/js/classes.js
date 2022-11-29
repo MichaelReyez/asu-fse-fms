@@ -132,16 +132,28 @@ class Card {
     this.identifier = identifier //unique identifier to match cards together
     this.id = makeid(16)
     this.flipped = false
+    this.blocked = false;
     this.gameObject = gameObject
   }
   callbackFn() {
-    this.gameObject.cardFlip(this)
+    if (!this.blocked) {
+      this.gameObject.cardFlip(this)
+    }
+  }
+  block() {
+    this.blocked = true;
+  }
+  unblock() {
+    this.blocked = false;
   }
   render() {
     this.div = createDiv()
     this.div.style('cursor', 'pointer')
     this.div.style('user-select', 'none')
     this.div.style('background-image', `url(${this.backImage})`)
+    this.div.style('background-size', 'cover')
+    this.div.style('background-repeat', 'no-repeat')
+
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
@@ -151,7 +163,6 @@ class Card {
       this.div.position(this.posX, this.posY)
     }
     this.div.mouseClicked(() => {
-      console.log(this.flipped)
       this.callbackFn()
     })
     this.callbackFn.bind(this)

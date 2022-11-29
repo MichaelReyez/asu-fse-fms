@@ -14,18 +14,37 @@ function shuffleArray(array) {
 class MatchGame {
   constructor(context) {
     this.context = context;
+    this.started = false;
+    this.firstCard = null;
+    this.elapsedTime = 0;
   }
   preload() {
     this.grid = this.context.elements[2]
+  }
+  generateCards() {
+    this.grid.elements = []
+    this.solvedCards = []
     this.cards = [
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 0, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 0, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/typegame/background.jpg', 0, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/typegame/background.jpg', 0, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
       new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 4, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 4, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 5, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 5, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 6, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 6, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 7, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 7, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 8, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 8, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 9, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 9, {}, this),
     ]
     this.cardIndexes = []
     for (var i = this.cards.length - 1; i >= 0; i--) {
@@ -34,19 +53,76 @@ class MatchGame {
     shuffleArray(this.cardIndexes)
     for (var i = 0; i < this.cardIndexes.length; i++) {
       var num = this.cardIndexes[i]
-      console.log(i)
-      if (i < 4) {
-        this.grid.addElement(this.cards[num], 0, i)
-      } else {
-        this.grid.addElement(this.cards[num], 1, i - 4)
-      }
+      this.grid.addElement(this.cards[num], Math.floor(i / 5), i % 5)
     }
   }
 
-  cardFlip(card) {
-    card.flip()
+  startTimer() {
+    this.elapsedTime = 0;
+    return setInterval(() => {
+      this.elapsedTime++
+      this.context.elements[4].updateValue(`${this.elapsedTime}s`)
+      if (!this.started) {
+        clearInterval(this.timerId)
+      }
+    }, 1000)
   }
-  start() {}
+
+  cardFlip(card) {
+    if (this.started) {
+      card.flip()
+      card.block()
+      if (this.firstCard == null) {
+        this.firstCard = card
+      } else if (card.identifier != this.firstCard.identifier) {
+        let a = new Audio('/static/snd/foghorn.m4a')
+        a.play()
+        var temp1 = this.firstCard
+        var temp2 = card
+        this.cards.forEach((c) => {
+          c.block()
+        })
+        setTimeout(() => {
+          temp1.unblock()
+          temp1.flip()
+          temp2.unblock()
+          temp2.flip()
+          this.cards.forEach((c) => {
+            if (!this.solvedCards.includes(c)) {
+              c.unblock()
+            }
+          })
+        }, 1000)
+        this.firstCard = null
+      } else {
+        this.firstCard.block()
+        card.block()
+        this.solvedCards.push(this.firstCard)
+        this.solvedCards.push(card)
+        this.firstCard = null
+        let a = new Audio('/static/snd/bell.m4a')
+        a.play()
+      }
+    }
+    if (this.cards.length == this.solvedCards.length) {
+      this.started = false;
+      let a = new Audio('/static/snd/yay.m4a')
+      a.play()
+    }
+  }
+  start() {
+    if (this.started) {
+      clearInterval(this.timerId)
+      this.timerId = this.startTimer()
+    } else {
+      this.timerId = this.startTimer()
+    }
+    this.started = true
+    this.generateCards()
+    this.context.derender()
+    this.context.render()
+
+  }
 }
 
 class TypeGame {
