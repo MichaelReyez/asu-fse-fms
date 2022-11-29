@@ -2,6 +2,53 @@ function randInt(num) {
   return Math.floor(Math.random() * num);
 }
 
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
+class MatchGame {
+  constructor(context) {
+    this.context = context;
+  }
+  preload() {
+    this.grid = this.context.elements[2]
+    this.cards = [
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 0, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 0, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
+      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
+    ]
+    this.cardIndexes = []
+    for (var i = this.cards.length - 1; i >= 0; i--) {
+      this.cardIndexes.push(i)
+    }
+    shuffleArray(this.cardIndexes)
+    for (var i = 0; i < this.cardIndexes.length; i++) {
+      var num = this.cardIndexes[i]
+      console.log(i)
+      if (i < 4) {
+        this.grid.addElement(this.cards[num], 0, i)
+      } else {
+        this.grid.addElement(this.cards[num], 1, i - 4)
+      }
+    }
+  }
+
+  cardFlip(card) {
+    card.flip()
+  }
+  start() {}
+}
+
 class TypeGame {
   constructor(context) {
     this.context = context
@@ -40,9 +87,11 @@ class TypeGame {
     if (this.currentText.length == this.currentInput.length + 1) {
       return
     } else {
-      let part1 = this.currentText.slice(0, this.currentInput.length + 1)
-      let part2 = this.currentText.slice(this.currentInput.length + 2, this.currentText.length)
-      this.context.elements[2].updateText(`${part1}<span style="text-decoration: underline">${this.currentText[this.currentInput.length + 1]}</span>${part2}`)
+      if (!this.mistake) {
+        let part1 = this.currentText.slice(0, this.currentInput.length + 1)
+        let part2 = this.currentText.slice(this.currentInput.length + 2, this.currentText.length)
+        this.context.elements[2].updateText(`${part1}<span style="text-decoration: underline">${this.currentText[this.currentInput.length + 1]}</span>${part2}`)
+      }
     }
   }
   spanLetter(index) {
@@ -66,8 +115,8 @@ class TypeGame {
         }
       }
       this.context.elements[3].updateText(this.currentInput)
-      this.checkMistakes()
       this.updateCursor()
+      this.checkMistakes()
     }
   }
   typeEvent(e) {
@@ -87,6 +136,7 @@ class TypeGame {
       }
       this.context.elements[6].updateValue(`${this.calcSpeed()}`)
       this.context.elements[3].updateText(this.currentInput)
+      this.checkMistakes()
     }
   }
   calcSpeed() {
@@ -112,13 +162,13 @@ class TypeGame {
     this.updateCursor()
     if (!this.started) {
       this.started = true;
-      fetch('static/typegame/paragraphs.json')
+      fetch('static/paragraphs.json')
         .then(response => response.json()).then(json => {
           this.currentText = json[randInt(json.length - 1)]
           this.context.elements[2].updateText(this.currentText)
         })
     } else {
-      fetch('static/typegame/paragraphs.json')
+      fetch('static/paragraphs.json')
         .then(response => response.json()).then(json => {
           this.currentText = json[randInt(json.length - 1)]
           this.context.elements[2].updateText(this.currentText)
@@ -195,7 +245,6 @@ class AimGame {
   }
   createMissBox() {
     this.missBox = createDiv()
-    this.missBox.style('cursor', 'url("static/img/crosshair.cur")')
     this.missBox.style('width', '100vw')
     this.missBox.style('height', '100vh')
     let f = this.onMiss.bind(this)

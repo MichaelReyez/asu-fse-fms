@@ -6,7 +6,7 @@ function setup() {
   document.querySelector('canvas').remove()
   mainMenu = new Context('transparent')
   aimingGameCtx = new Context('transparent', 'static/img/aimgame/background.jpg')
-  typingGameCtx = new Context('transparent')
+  typingGameCtx = new Context('transparent', 'static/img/typegame/background.jpg')
   matchingGameCtx = new Context('transparent')
   i1 = createImg('static/img/aiming-icon.png', 'picture')
   i1.style('max-width', '100%')
@@ -182,11 +182,11 @@ function setup() {
         'font-family': 'Monaco',
         'overflow': 'hidden',
         'height': '40vh',
-        'width': '100vw',
+        'width': '90vw',
         'box-sizing': 'border-box',
-        'opacity': '50%',
+        'opacity': '75%',
         'background': 'white'
-      }, 0, windowHeight * 0.4),
+      }, windowWidth * 0.05, windowHeight * 0.4),
       new TextBox(typingGameCtx, '', {
         'font-size': '1.5em',
         'border-radius': '2em',
@@ -197,9 +197,9 @@ function setup() {
         'font-family': 'Monaco',
         'overflow': 'hidden',
         'height': '40vh',
-        'width': '100vw',
+        'width': '90vw',
         'box-sizing': 'border-box',
-      }, 0, windowHeight * 0.4),
+      }, windowWidth * 0.05, windowHeight * 0.4),
       new Button(typingGameCtx, 'Start', typingGame.start, [], {
         'font-size': '2em',
         'border-radius': '2em',
@@ -234,6 +234,7 @@ function setup() {
       }, windowWidth * 0.05, windowHeight * 0.9)
     ]
   )
+  matchingGame = new MatchGame(matchingGameCtx)
   matchingGameCtx.addElements(
     [new Title(matchingGameCtx, 'Matching', {
         'font-size': '4em',
@@ -250,8 +251,13 @@ function setup() {
         'text-align': 'center',
         'font-family': 'Futura'
       }, windowWidth * 0.05, windowHeight * 0.05),
+      new Grid(matchingGameCtx, 2, 4, {
+        'width': '100vw',
+        'height': '50vw',
+      }, 0, 0.25 * windowHeight)
     ]
   )
+  matchingGame.preload()
   mainMenu.render()
 }
 

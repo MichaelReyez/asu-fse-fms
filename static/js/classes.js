@@ -74,6 +74,109 @@ class Context {
   }
 }
 
+class Grid {
+  constructor(parentContext, rows, columns, css, posX, posY) {
+    this.parentContext = parentContext
+    this.rows = rows
+    this.columns = columns
+    this.css = css;
+    this.posX = posX
+    this.posY = posY
+    this.elements = []
+    this.id = makeid(16)
+
+  }
+  addElement(element, rowIndex, colIndex) {
+    this.elements.push([
+      element, rowIndex, colIndex
+    ])
+  }
+  render() {
+    this.div = createDiv()
+    this.div.style('display', 'grid')
+    this.div.style('grid-template-columns', `repeat(${this.columns}, 1fr)`)
+    this.div.style('grid-template-rows', `repeat(${this.rows}, 1fr)`)
+    for (const property in this.css) {
+      this.div.style(property, this.css[property])
+    }
+    this.div.position(this.posX, this.posY)
+    this.div.addClass('context-' + this.parentContext.id)
+    this.div.id('grid-' + this.id)
+    this.elements.forEach((data) => {
+      console.log(data)
+      data[0].render()
+      data[0].div.style('grid-column-start', data[0])
+      data[0].div.style('grid-column-end', data[0])
+      data[0].div.style('grid-row-start', data[1])
+      data[0].div.style('grid-row-end', data[1])
+      nestElement(this.div, data[0].div)
+    })
+  }
+  derender() {
+    try {
+      this.div.remove()
+    } catch (e) {
+      console.log(`Grid ${this.id} not rendered, derender not executed.`)
+    }
+  }
+}
+
+class Card {
+  constructor(parentContext, frontImage, backImage, identifier, css, gameObject, posX = null, posY = null) {
+    this.parentContext = parentContext
+    this.css = css
+    this.frontImage = frontImage
+    this.backImage = backImage
+    this.posX = posX
+    this.posY = posY
+    this.identifier = identifier //unique identifier to match cards together
+    this.id = makeid(16)
+    this.flipped = false
+    this.gameObject = gameObject
+  }
+  callbackFn() {
+    this.gameObject.cardFlip(this)
+  }
+  render() {
+    this.div = createDiv()
+    this.div.style('cursor', 'pointer')
+    this.div.style('user-select', 'none')
+    this.div.style('background-image', `url(${this.backImage})`)
+    for (const property in this.css) {
+      this.div.style(property, this.css[property])
+    }
+    if (this.posX == null) {
+      this.div.position(this.posX, this.posY, 'relative')
+    } else {
+      this.div.position(this.posX, this.posY)
+    }
+    this.div.mouseClicked(() => {
+      console.log(this.flipped)
+      this.callbackFn()
+    })
+    this.callbackFn.bind(this)
+    this.flip.bind(this)
+    this.div.addClass('context-' + this.parentContext.id)
+    this.div.id('card-' + this.id)
+  }
+  derender() {
+    try {
+      this.div.remove()
+    } catch (e) {
+      console.log(`Card ${this.id} not rendered, derender not executed.`)
+    }
+  }
+  flip() {
+    if (this.flipped) {
+      this.div.style('background-image', `url(${this.backImage})`)
+      this.flipped = false
+    } else {
+      this.div.style('background-image', `url(${this.frontImage})`)
+      this.flipped = true
+    }
+  }
+}
+
 class Button {
   constructor(parentContext, textLabel, callbackFunc, callbackFunctionArgs, css, posX = null, posY = null, nestedElement = null, callbackFunctionClass = null) {
     this.parentContext = parentContext
@@ -108,7 +211,7 @@ class Button {
     this.div.style('display', 'flex')
     this.div.style('align-items', 'center')
     this.div.style('justify-content', 'center')
-    this.div.style('flex-flow', 'columiconfriconn')
+    this.div.style('flex-flow', 'column')
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
@@ -173,7 +276,8 @@ class Target {
     }
     this.div.mouseClicked(this.callbackFunction)
     this.div.addClass('context-' + this.parentContext.id)
-    this.div.id('Target-' + this.id)
+    this.div.addClass('ease-in')
+    this.div.id('target-' + this.id)
   }
   derender() {
     try {
