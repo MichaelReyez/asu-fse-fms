@@ -17,6 +17,7 @@ class MatchGame {
     this.started = false;
     this.firstCard = null;
     this.elapsedTime = 0;
+    this.attempts = 0
   }
   preload() {
     this.grid = this.context.elements[2]
@@ -25,26 +26,66 @@ class MatchGame {
     this.grid.elements = []
     this.solvedCards = []
     this.cards = [
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/typegame/background.jpg', 0, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/typegame/background.jpg', 0, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 1, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 2, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 3, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 4, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 4, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 5, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 5, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 6, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 6, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 7, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 7, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 8, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 8, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 9, {}, this),
-      new Card(this.context, 'static/img/aimgame/background.jpg', 'static/img/aimgame/wood.jpg', 9, {}, this),
+      new Card(this.context, 'static/img/matchgame/0.jpg', 'static/img/matchgame/back.jpg', 0, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/0.jpg', 'static/img/matchgame/back.jpg', 0, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/1.jpg', 'static/img/matchgame/back.jpg', 1, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/1.jpg', 'static/img/matchgame/back.jpg', 1, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/2.jpg', 'static/img/matchgame/back.jpg', 2, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/2.jpg', 'static/img/matchgame/back.jpg', 2, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/3.jpg', 'static/img/matchgame/back.jpg', 4, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/3.jpg', 'static/img/matchgame/back.jpg', 4, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/4.jpg', 'static/img/matchgame/back.jpg', 5, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/4.jpg', 'static/img/matchgame/back.jpg', 5, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/5.jpg', 'static/img/matchgame/back.jpg', 6, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/5.jpg', 'static/img/matchgame/back.jpg', 6, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/6.jpg', 'static/img/matchgame/back.jpg', 7, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/6.jpg', 'static/img/matchgame/back.jpg', 7, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/7.jpg', 'static/img/matchgame/back.jpg', 8, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/7.jpg', 'static/img/matchgame/back.jpg', 8, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/8.jpg', 'static/img/matchgame/back.jpg', 9, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/8.jpg', 'static/img/matchgame/back.jpg', 9, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/9.jpg', 'static/img/matchgame/back.jpg', 3, {
+        'border-radius': '1em',
+      }, this),
+      new Card(this.context, 'static/img/matchgame/9.jpg', 'static/img/matchgame/back.jpg', 3, {
+        'border-radius': '1em',
+      }, this),
     ]
     this.cardIndexes = []
     for (var i = this.cards.length - 1; i >= 0; i--) {
@@ -59,6 +100,7 @@ class MatchGame {
 
   startTimer() {
     this.elapsedTime = 0;
+    this.context.elements[4].updateValue(`${this.elapsedTime}s`)
     return setInterval(() => {
       this.elapsedTime++
       this.context.elements[4].updateValue(`${this.elapsedTime}s`)
@@ -75,6 +117,7 @@ class MatchGame {
       if (this.firstCard == null) {
         this.firstCard = card
       } else if (card.identifier != this.firstCard.identifier) {
+        this.attempts++
         let a = new Audio('/static/snd/foghorn.m4a')
         a.play()
         var temp1 = this.firstCard
@@ -95,6 +138,7 @@ class MatchGame {
         }, 1000)
         this.firstCard = null
       } else {
+        this.attempts++
         this.firstCard.block()
         card.block()
         this.solvedCards.push(this.firstCard)
@@ -104,6 +148,7 @@ class MatchGame {
         a.play()
       }
     }
+    this.context.elements[5].updateValue(this.attempts)
     if (this.cards.length == this.solvedCards.length) {
       this.started = false;
       let a = new Audio('/static/snd/yay.m4a')
@@ -118,6 +163,8 @@ class MatchGame {
       this.timerId = this.startTimer()
     }
     this.started = true
+    this.attempts = 0
+    this.context.elements[5].updateValue(this.attempts)
     this.generateCards()
     this.context.derender()
     this.context.render()

@@ -153,6 +153,7 @@ class Card {
     this.div.style('background-image', `url(${this.backImage})`)
     this.div.style('background-size', 'cover')
     this.div.style('background-repeat', 'no-repeat')
+    this.div.style('background-position', 'center')
 
     for (const property in this.css) {
       this.div.style(property, this.css[property])

@@ -7,7 +7,7 @@ function setup() {
   mainMenu = new Context('transparent')
   aimingGameCtx = new Context('transparent', 'static/img/aimgame/background.jpg')
   typingGameCtx = new Context('transparent', 'static/img/typegame/background.jpg')
-  matchingGameCtx = new Context('transparent')
+  matchingGameCtx = new Context('transparent', 'static/img/matchgame/background.jpg')
   i1 = createImg('static/img/aiming-icon.png', 'picture')
   i1.style('max-width', '100%')
   i1.style('object-fit', 'contain')
@@ -255,8 +255,10 @@ function setup() {
         'width': '55vw',
         'height': '44vw',
         'gap': '1vw',
-        'border': '0.2em black solid',
-      }, windowWidth * 0.225, 0.175 * windowHeight),
+        'border': '1vw #8a3124 solid',
+        'background': '#8a3124',
+        'border-radius': '1em',
+      }, windowWidth * 0.215, 0.12 * windowHeight),
       new Button(matchingGameCtx, 'Start', matchingGame.start, [], {
         'font-size': '2em',
         'border-radius': '2em',
@@ -278,6 +280,17 @@ function setup() {
         'overflow': 'hidden',
         'white-space': 'nowrap',
       }, windowWidth * 0.8, windowHeight * 0.025, '0s'),
+      new ScoreCounter(matchingGameCtx, 'Attempts', {
+        'font-size': '2em',
+        'border-radius': '2em',
+        'color': 'black',
+        'border': '0.1em black solid',
+        'padding': '0.2em 1em',
+        'text-align': 'center',
+        'font-family': 'Futura',
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+      }, windowWidth * 0.8, windowHeight * 0.1, '0'),
     ]
   )
   matchingGame.preload()
