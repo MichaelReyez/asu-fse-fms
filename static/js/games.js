@@ -21,6 +21,9 @@ class MatchGame {
   }
   preload() {
     this.grid = this.context.elements[2]
+    for (var i = 0; i < 10; i++) {
+      fetch(`static/img/matchgame/${i}.jpg`) // preload images
+    }
   }
   generateCards() {
     this.grid.elements = []
