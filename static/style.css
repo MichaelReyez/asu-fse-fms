@@ -8,6 +8,10 @@
   src: url(../static/Monaco.ttf);
 }
 
+body {
+  margin: 0;
+}
+
 .ease-in {
   transition: all 200ms ease-in;
 }

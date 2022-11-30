@@ -1,10 +1,6 @@
 function setup() {
-  document.querySelector('body').style.backgroundImage = 'url(https://64.media.tumblr.com/461f07e0cd7bbbb1f4980f0ae7fb63f8/tumblr_oiudlb0x2t1v27836o1_500.gifv)'
-  document.querySelector('body').style.backgroundSize = 'cover'
-  document.querySelector('body').style.backgroundRepeat = 'no-repeat'
-  document.querySelector('body').style.backgroundPosition = 'center 25%'
   document.querySelector('canvas').remove()
-  mainMenu = new Context('transparent')
+  mainMenu = new Context('transparent', 'static/img/background.png')
   aimingGameCtx = new Context('transparent', 'static/img/aimgame/background.jpg')
   typingGameCtx = new Context('transparent', 'static/img/typegame/background.jpg')
   matchingGameCtx = new Context('transparent', 'static/img/matchgame/background.jpg')
@@ -29,9 +25,9 @@ function setup() {
       'width': '100%',
       'font-family': 'Futura',
       'padding': '2em 0',
-      'background': 'rgba(0,0,0,0.2)',
-      'backdrop-filter': 'blur(5px)',
-      'box-shadow': '0 0 20px 50px rgba(0,0,0,0.2)'
+      // 'background': 'rgba(0,0,0,0.2)',
+      // 'backdrop-filter': 'blur(5px)',
+      // 'box-shadow': '0 0 20px 50px rgba(0,0,0,0.2)'
     }, 0, windowHeight / 2, [new Button(mainMenu, 'Aiming', switchContext, [aimingGameCtx, mainMenu], {
         'font-size': '2em',
         'border-radius': '1em',

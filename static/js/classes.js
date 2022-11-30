@@ -48,8 +48,8 @@ class Context {
       this.bg.style('background-repeat', 'no-repeat')
       this.bg.style('background-size', 'cover')
       this.bg.style('z-index', '-1000')
-      this.bg.style('width', '99vw')
-      this.bg.style('height', '99vh')
+      this.bg.style('width', '100vw')
+      this.bg.style('height', '100vh')
     }
     this.elements.forEach(element => {
       try {
