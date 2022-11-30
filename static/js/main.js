@@ -170,7 +170,8 @@ function setup() {
         'padding': '0.2em 1em',
         'width': '4em',
         'text-align': 'center',
-        'font-family': 'Futura'
+        'font-family': 'Futura',
+        'background': 'rgba(255,255,255,0.75)'
       }, windowWidth * 0.05, windowHeight * 0.025),
       new TextBox(typingGameCtx, '', {
         'font-size': '1.5em',
@@ -208,7 +209,8 @@ function setup() {
         'padding': '0.2em 1em',
         'width': '4em',
         'text-align': 'center',
-        'font-family': 'Futura'
+        'font-family': 'Futura',
+        'background': 'rgba(255,255,255,0.75)'
       }, windowWidth * 0.8, windowHeight * 0.9, null, typingGame),
       new ScoreCounter(typingGameCtx, 'Time', {
         'font-size': '2em',
@@ -220,6 +222,7 @@ function setup() {
         'font-family': 'Futura',
         'overflow': 'hidden',
         'white-space': 'nowrap',
+        'background': 'rgba(255,255,255,0.75)'
       }, windowWidth * 0.8, windowHeight * 0.025, '0s'),
       new ScoreCounter(typingGame, 'Speed (WPM)', {
         'font-size': '2em',
@@ -231,6 +234,7 @@ function setup() {
         'font-family': 'Futura',
         'overflow': 'hidden',
         'white-space': 'nowrap',
+        'background': 'rgba(255,255,255,0.75)'
       }, windowWidth * 0.05, windowHeight * 0.9)
     ]
   )

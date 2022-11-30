@@ -1,3 +1,13 @@
+@font-face {
+  font-family: Futura;
+  src: url(../static/Futura.ttc);
+}
+
+@font-face {
+  font-family: Monaco;
+  src: url(../static/Monaco.ttf);
+}
+
 .ease-in {
   transition: all 200ms ease-in;
 }
