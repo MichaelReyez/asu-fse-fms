@@ -357,6 +357,7 @@ class Title {
   render() {
     this.div = createDiv(this.textLabel)
     this.div.style('width', '100%')
+    this.div.style('user-select', 'none')
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
@@ -415,6 +416,7 @@ class ScoreCounter {
   }
   render() {
     this.div = createDiv(`${this.textLabel}: ${this.value}`)
+    this.div.style('user-select', 'none')
     for (const property in this.css) {
       this.div.style(property, this.css[property])
     }
